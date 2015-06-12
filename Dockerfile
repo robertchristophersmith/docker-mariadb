@@ -1,7 +1,9 @@
-#MariaDB (https://mariadb.org/)
+# MariaDB 5.5 (https://mariadb.org/)
 
-FROM phusion/baseimage:0.9.10
-MAINTAINER Ryan Seto <ryanseto@yak.net>
+FROM phusion/baseimage:0.9.16
+
+# FORMER_FORK_MAINTAINER Ryan Seto <ryanseto@yak.net>
+MAINTAINER Robert C Smith <robert@robertcsmith.com
 
 # Ensure UTF-8
 RUN locale-gen en_US.UTF-8
@@ -12,10 +14,8 @@ RUN rm -rf /etc/service/sshd /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Install MariaDB from repository.
 RUN echo "deb http://ftp.osuosl.org/pub/mariadb/repo/5.5/ubuntu trusty main" > /etc/apt/sources.list.d/mariadb.list && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes mariadb-server mariadb-server-5.5
-
-# Install other tools.
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y pwgen inotify-tools
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes mariadb-server mariadb-server-5.5 && \
+    pwgen inotify-tools # Installed other tools here.
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -28,12 +28,14 @@ RUN sed -i -e 's/^bind-address/#bind-address/' /etc/mysql/my.cnf
 
 # Change the innodb-buffer-pool-size to 128M (default is 256M).
 # This should make it friendlier to run on low memory servers.
-RUN sed -i -e 's/^innodb_buffer_pool_size\s*=.*/innodb_buffer_pool_size = 128M/' /etc/mysql/my.cnf
+# Redacted by Robert C Smith
+#RUN sed -i -e 's/^innodb_buffer_pool_size\s*=.*/innodb_buffer_pool_size = 256M/' /etc/mysql/my.cnf
 
 EXPOSE 3306
+
 ADD scripts /scripts
-RUN chmod +x /scripts/start.sh
-RUN touch /firstrun
+RUN chmod +x /scripts/start.sh && /
+    touch /firstrun
 
 # Expose our data, log, and configuration directories.
 VOLUME ["/data", "/var/log/mysql", "/etc/mysql"]

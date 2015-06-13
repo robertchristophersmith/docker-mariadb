@@ -2,8 +2,8 @@
 
 FROM phusion/baseimage:0.9.16
 
-# FORMER_FORK_MAINTAINER Ryan Seto <ryanseto@yak.net>
-MAINTAINER Robert C Smith <robert@robertcsmith.com
+# inspired by Ryan Seto <ryanseto@yak.net>
+MAINTAINER Robert C Smith <robertchristophersmith@gmail.com>
 
 # Ensure UTF-8
 RUN locale-gen en_US.UTF-8
